@@ -1,4 +1,4 @@
-import { PROXY_API } from "@/utils/config";
+import { provideProxyAPI } from "@/utils/config";
 import { fetch } from '@tauri-apps/plugin-http'
 
 export type ClientAsset = {
@@ -33,6 +33,7 @@ export type SubscriptionData = {
 }
 
 export async function fetchClientAssets(session: string, raw_id: string): Promise<ClientAssets> {
+    let PROXY_API = await provideProxyAPI();
     const response = await fetch(`${PROXY_API}/api/v1/client/assets`,
         {
             headers: {
@@ -48,6 +49,7 @@ export async function fetchClientAssets(session: string, raw_id: string): Promis
 }
 
 export async function buildClientArgs(session: string, raw_id: string, install_dir: string, ram: number, max_ram: number, window_w: number, window_h: number): Promise<ClientArgs> {
+    let PROXY_API = await provideProxyAPI();
     const response = await fetch(`${PROXY_API}/api/v1/client/build/args`,
         {
             headers: {
@@ -63,6 +65,7 @@ export async function buildClientArgs(session: string, raw_id: string, install_d
 }
 
 export async function fetchClientInfos(session: string): Promise<ClientData[]> {
+    let PROXY_API = await provideProxyAPI();
     const response = await fetch(`${PROXY_API}/api/v1/client/all`,
         {
             headers: {
@@ -77,6 +80,7 @@ export async function fetchClientInfos(session: string): Promise<ClientData[]> {
 }
 
 export async function fetchSubscriptionInfo(session: string, raw_id: string): Promise<SubscriptionData> {
+    let PROXY_API = await provideProxyAPI();
     const response = await fetch(`${PROXY_API}/api/v1/subscription`,
         {
             headers: {

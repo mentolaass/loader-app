@@ -4,6 +4,7 @@ use std::{
 };
 
 use tauri::App;
+use vmprotect::protected;
 
 pub static VARIABLES: LazyLock<RwLock<HashMap<String, String>>> =
     LazyLock::new(|| RwLock::new(HashMap::new()));
@@ -25,6 +26,12 @@ pub fn get_product_name() -> String {
         .cloned()
         .unwrap_or(String::from("MLoader"))
 }
+
+#[tauri::command]
+pub fn get_proxy_api() -> String {
+    protected!(cstr "http://localhost:8080").to_string()
+}
+
 
 pub fn bootstrap(app: &App) {
     init_product_name(app);

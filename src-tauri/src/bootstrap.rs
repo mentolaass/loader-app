@@ -5,39 +5,12 @@ use tokio::{
     process::Command as AsyncCommand,
     time::{sleep, Duration},
 };
-use std::{
-    collections::VecDeque,
-    sync::{LazyLock, RwLock},
-};
 
-pub static RUNNING: LazyLock<RwLock<VecDeque<String>>> = LazyLock::new(|| RwLock::new(VecDeque::new()));
+use std::collections::VecDeque;
+use std::sync::{LazyLock, RwLock};
 
-#[tauri::command]
-pub fn client_is_running(id: String) -> bool {
-    match RUNNING.read() {
-        Ok(guard) => guard.contains(&id),
-        Err(_) => {
-            eprintln!("Failed to read RUNNING state");
-            false
-        }
-    }
-}
-
-pub fn client_stopping(rawid: String) {
-    if let Ok(mut guard) = RUNNING.write() {
-        guard.retain(|x| x != &rawid);
-    } else {
-        eprintln!("Failed to acquire write lock for RUNNING state");
-    }
-}
-
-pub fn client_running(rawid: String) {
-    if let Ok(mut guard) = RUNNING.write() {
-        guard.push_back(rawid);
-    } else {
-        eprintln!("Failed to acquire write lock for RUNNING state");
-    }
-}
+pub static RUNNING: LazyLock<RwLock<VecDeque<String>>> =
+    LazyLock::new(|| RwLock::new(VecDeque::new()));
 
 #[tauri::command]
 pub async fn run_client(
@@ -165,6 +138,32 @@ pub async fn run_client(
 }
 
 fn clone_id(id: &str) -> String {
-    let clonedid = id.to_string();
-    clonedid
+    id.to_string()
+}
+
+#[tauri::command]
+pub fn client_is_running(id: String) -> bool {
+    match RUNNING.read() {
+        Ok(guard) => guard.contains(&id),
+        Err(_) => {
+            eprintln!("Failed to read RUNNING state");
+            false
+        }
+    }
+}
+
+pub fn client_stopping(rawid: String) {
+    if let Ok(mut guard) = RUNNING.write() {
+        guard.retain(|x| x != &rawid);
+    } else {
+        eprintln!("Failed to acquire write lock for RUNNING state");
+    }
+}
+
+pub fn client_running(rawid: String) {
+    if let Ok(mut guard) = RUNNING.write() {
+        guard.push_back(rawid);
+    } else {
+        eprintln!("Failed to acquire write lock for RUNNING state");
+    }
 }

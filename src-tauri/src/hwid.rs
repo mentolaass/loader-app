@@ -2,6 +2,7 @@ use crate::hash::get_sha256;
 use raw_cpuid::CpuId;
 use std::{ffi::OsStr, os::windows::ffi::OsStrExt, ptr::null_mut};
 use sysinfo::{Disks, System};
+use vmprotect::protected;
 use windows::Win32::Foundation::HANDLE;
 use windows::{
     core::PCWSTR,
@@ -18,19 +19,21 @@ use windows::{
 
 #[tauri::command]
 pub fn get_hwid() -> String {
-    let mut sys = System::new_all();
-    let cpuid = CpuId::new();
-    sys.refresh_all();
+    protected!(ultra "get_hwid"; {
+        let mut sys = System::new_all();
+        let cpuid = CpuId::new();
+        sys.refresh_all();
 
-    let volume_serial = calculate_volume_serial();
-    let memory_mb = sys.total_memory() / 1024 / 1024 / 1024;
-    let cpu_serial = cpuid.get_processor_serial().unwrap().serial_all();
-    let gpu_info = get_gpu_info();
+        let volume_serial = calculate_volume_serial();
+        let memory_mb = sys.total_memory() / 1024 / 1024 / 1024;
+        let cpu_serial = cpuid.get_processor_serial().unwrap().serial_all();
+        let gpu_info = get_gpu_info();
 
-    get_sha256(String::from(format!(
-        "{}-{}-{}-{}",
-        volume_serial, memory_mb, cpu_serial, gpu_info
-    )))
+        get_sha256(String::from(format!(
+            "{}-{}-{}-{}",
+            volume_serial, memory_mb, cpu_serial, gpu_info
+        )))
+    })
 }
 
 fn get_gpu_info() -> String {

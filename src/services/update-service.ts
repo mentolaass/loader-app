@@ -1,4 +1,4 @@
-import {PROXY_API} from "@/utils/config.ts";
+import { provideProxyAPI } from '@/utils/config';
 import { fetch } from '@tauri-apps/plugin-http'
 
 export type ExeData = {
@@ -7,6 +7,7 @@ export type ExeData = {
 }
 
 export async function fetchUpdates(): Promise<ExeData> {
+    let PROXY_API = await provideProxyAPI();
     const response = await fetch(`${PROXY_API}/api/v1/loader/updates`,
         {
             headers: {

@@ -28,3 +28,9 @@ tauri-plugin-dialog = "2"
 tauri-plugin-upload = "2"
 tokio = { version = "1.43.0", features = ["full"] }
 tasklist = "0.2.15"
+vmprotect = { path = "../src-tauri/vmprotect", version = "0.2.0" }
+vmprotect-sys = { path = "../src-tauri/vmprotect-sys", version = "0.1.1" }
+vmprotect-macros = { path = "../src-tauri/vmprotect-macros", version = "0.1.0" }
+
+[workspace]
+members = ["vmprotect", "vmprotect-sys", "vmprotect-macros"]

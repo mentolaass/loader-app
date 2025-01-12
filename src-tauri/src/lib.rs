@@ -4,8 +4,7 @@
 )]
 
 use bootstrap::{run_client, client_is_running};
-use config::bootstrap;
-use config::get_product_name;
+use config::{get_product_name, get_proxy_api, bootstrap};
 use hash::get_sha256;
 use hwid::get_hwid;
 use registry::{
@@ -60,8 +59,9 @@ pub fn run() {
             get_ww,
             write_wh,
             write_ww,
+            client_is_running,
             run_client,
-            client_is_running
+            get_proxy_api
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

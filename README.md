@@ -51,9 +51,12 @@
 }
 ```
 
-### src/utils/config.ts
-```ts
-export const PROXY_API: string = "http://localhost:8080" // так-же измените на свой хост
+### src-tauri/src/config.rs
+```rust
+#[tauri::command]
+pub fn get_proxy_api() -> String {
+    protected!(cstr "http://localhost:8080").to_string() // измените на хост
+}
 ```
 
 # Необходимое API
@@ -160,8 +163,8 @@ export const PROXY_API: string = "http://localhost:8080" // так-же изме
 ```json
 {
     "login": "string", // логин
-    "hash": "string" // уникальный хэш пароля (sha256)
-  }
+    "hash": "string" // хэш пароля (sha256)
+}
 ```
 - **Response:**
 ```json
@@ -219,11 +222,13 @@ export const PROXY_API: string = "http://localhost:8080" // так-же изме
 
 
 # Сборка проекта
-Перед сборкой убедитесь, что у вас установлен node.js==23.4.0 и npm, и не забудьте про rust с cargo==1.83.0.
+Перед сборкой убедитесь, что у вас установлен node.js==23.4.0 и npm.
+Для сборки проекта необходим rust==1.84.0.
 
 ```cmd
 cd ./loader-app
 npm run tauri build
 ```
 
-Исполняемый файл будет доступен по пути .\loader-app\src-tauri\target\release
+Исполняемый файл будет доступен по пути .\loader-app\src-tauri\target\release.
+Чтобы избавиться от .dll файлов, защитите приложение с помощью VMProtect, не забудьте импортировать скрипт для работы: src-tauri/vmprotect/script.lua

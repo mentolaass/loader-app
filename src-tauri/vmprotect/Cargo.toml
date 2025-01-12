@@ -1,0 +1,24 @@
+[package]
+name = "vmprotect"
+version = "0.2.0"
+authors = ["Лач <iam@lach.pw>"]
+edition = "2018"
+description = "Unofficial VMProtect SDK for Rust"
+license = "MIT"
+repository = "https://github.com/CertainLach/vmprotect/"
+
+[features]
+default = ["licensing", "service", "strings"]
+licensing = []
+strings = []
+service = []
+
+[dependencies]
+real_c_string = "1.0"
+widestring = "0.4.3"
+bitflags = "1.2"
+enum_primitive = "0.1.1"
+num-traits = "0.2.14"
+chrono = "0.4.19"
+vmprotect-sys = { path = "../vmprotect-sys", version = "0.1.1" }
+vmprotect-macros = { path = "../vmprotect-macros", version = "0.1.0" }

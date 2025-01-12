@@ -10,11 +10,11 @@ import parse from 'html-react-parser';
 import useTranslation from "@/hooks/use-translation";
 import { invoke } from "@tauri-apps/api/core";
 import { download } from '@tauri-apps/plugin-upload';
-import { PROXY_API } from "@/utils/config";
 import { toast } from "@/hooks/use-toast";
 import { Progress } from "../ui/progress";
 import { TooltipProvider, Tooltip } from "../ui/tooltip";
 import UiField from "../field/ui-field";
+import { provideProxyAPI } from "@/utils/config";
 
 function InstallClientDialog({ isOpen, onOpenChange, client, session }: { isOpen: boolean, onOpenChange: (v: boolean) => void, client: ClientData, session: string }) {
     const { getString } = useTranslation();
@@ -28,6 +28,7 @@ function InstallClientDialog({ isOpen, onOpenChange, client, session }: { isOpen
     async function load() {
         setIsProcessing(true);
         try {
+            let PROXY_API = await provideProxyAPI();
             const assets: ClientAssets = await fetchClientAssets(session, client.raw_id);
             let downloaded = 0;
             let checked = 0;

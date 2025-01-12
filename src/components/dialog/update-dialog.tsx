@@ -6,7 +6,7 @@ import {invoke} from "@tauri-apps/api/core";
 import {ExeData, fetchUpdates} from "@/services/update-service.ts";
 import { download } from '@tauri-apps/plugin-upload';
 import {randomChars} from "@/utils/utils.ts";
-import {PROXY_API} from "@/utils/config.ts";
+import { provideProxyAPI } from "@/utils/config";
 
 function UpdateDialog({ onClose }: { onClose: () => void }) {
     const { getString } = useTranslation();
@@ -21,6 +21,7 @@ function UpdateDialog({ onClose }: { onClose: () => void }) {
             if (exeData.sha256 !== currentHash) {
                 setCurrentState("updater-process");
                 const pathToDownload: string = `./${randomChars(10)}.exe`;
+                let PROXY_API = await provideProxyAPI();
                 await download(
                     exeData.download_url.startsWith("http") ? exeData.download_url : `${PROXY_API}${exeData.download_url}`,
                     pathToDownload
