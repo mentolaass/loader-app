@@ -47,7 +47,7 @@ function DebugPage() {
                 unlisten_cd = await listen("client_data", (event) => {
                     const content = `${event.payload}`;
                     if (content.includes("%is_data%")) {
-                        const matches = content.match(/%is_data%(\d+)-(UTC \d{4}\/\d{1,2}\/\d{1,2} \d{1,2}:\d{2}:\d{2})/);
+                        const matches = content.match(/%is_data%(\d+)-(UTC \d{4}\/\d{1,2}\/\d{1,2} \d{1,2}:\d{1,2}:\d{1,2})/);
                         const values = matches ? matches : [];
                         setRuntime(parseUTCTimeToSeconds(values[2]));
                         setRAM(((parseInt(values[1], 10) / 1024) / 1024).toFixed(0));
