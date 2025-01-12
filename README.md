@@ -228,6 +228,7 @@ pub fn get_proxy_api() -> String {
 
 ```cmd
 cd ./loader-app
+npm i
 npm run tauri build
 ```
 
