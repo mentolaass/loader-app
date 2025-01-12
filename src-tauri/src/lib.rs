@@ -1,0 +1,68 @@
+#![cfg_attr(
+    all(not(debug_assertions), target_os = "windows"),
+    windows_subsystem = "windows"
+)]
+
+use bootstrap::{run_client, client_is_running};
+use config::bootstrap;
+use config::get_product_name;
+use hash::get_sha256;
+use hwid::get_hwid;
+use registry::{
+    get_debug, get_install_dir, get_language, get_ram, get_session, get_wh, get_ww, write_debug,
+    write_install_dir, write_language, write_ram, write_session, write_wh, write_ww,
+};
+use utils::{
+    create_recursive_dirs, file_is_exists_and_checksum, get_current_file_sha256, get_file_sha256,
+    get_total_ram, re_run_app_with_remove,
+};
+
+mod bootstrap;
+mod config;
+mod hash;
+mod hwid;
+mod registry;
+mod utils;
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_upload::init())
+        .plugin(tauri_plugin_dialog::init())
+        .setup(|app| {
+            bootstrap(app);
+
+            Ok(())
+        })
+        .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![
+            write_session,
+            get_session,
+            get_hwid,
+            get_sha256,
+            get_install_dir,
+            write_install_dir,
+            get_product_name,
+            write_ram,
+            get_ram,
+            get_total_ram,
+            write_debug,
+            get_debug,
+            write_language,
+            get_language,
+            get_current_file_sha256,
+            re_run_app_with_remove,
+            get_file_sha256,
+            create_recursive_dirs,
+            file_is_exists_and_checksum,
+            get_wh,
+            get_ww,
+            write_wh,
+            write_ww,
+            run_client,
+            client_is_running
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}

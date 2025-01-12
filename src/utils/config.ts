@@ -1,0 +1,1 @@
+export const PROXY_API: string = "http://localhost:8080"
