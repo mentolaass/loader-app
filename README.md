@@ -160,8 +160,8 @@ export const PROXY_API: string = "http://localhost:8080" // так-же изме
 ```json
 {
     "login": "string", // логин
-    "hash": "string" // уникальный хэш пароля (sha256)
-  }
+    "hash": "string" // хэш пароля (sha256)
+}
 ```
 - **Response:**
 ```json
