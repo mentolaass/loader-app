@@ -221,7 +221,6 @@ pub fn get_proxy_api() -> String {
 }
 ```
 
-
 # Сборка проекта
 Перед сборкой убедитесь, что у вас установлен node.js==23.4.0 и npm.
 Для сборки проекта необходим rust==1.84.0.
@@ -231,9 +230,5 @@ cd ./loader-app
 npm run tauri build
 ```
 
-<<<<<<< HEAD
 Исполняемый файл будет доступен по пути .\loader-app\src-tauri\target\release.
-Чтобы избавиться от .dll файлов, защитите приложение с помощью VMProtect, не забудьте импортировать скрипт для работы: src-tauri/vmprotect/script.lua
-=======
-Исполняемый файл будет доступен по пути .\loader-app\src-tauri\target\release
->>>>>>> a3dc3efa40b0a965903a3b3eee28f0c19f285cbe
+Чтобы избавиться от .dll файлов, защитите приложение с помощью VMProtect, импортируйте скрипт для работы: src-tauri/vmprotect/script.lua
