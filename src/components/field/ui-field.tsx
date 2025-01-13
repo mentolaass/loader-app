@@ -9,7 +9,7 @@ function UiField({ tooltip, value, icon }: { tooltip: string, value: any, icon: 
                     {value}
                 </div>
             </TooltipTrigger>
-            <TooltipContent className="bg-slate-950 font-inter text-white">
+            <TooltipContent className="bg-slate-950 rounded-3xl font-inter text-white">
                 {tooltip}
             </TooltipContent>
         </Tooltip>

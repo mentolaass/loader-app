@@ -41,7 +41,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <Routes>
         <Route path={"/"} element=
           {
-            <TitlebarLayer window="main">
+            <TitlebarLayer>
               <LoginPage />
             </TitlebarLayer>
           }
@@ -49,7 +49,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path={"/loader"} element=
           {
             <BackgroundLayer>
-              <TitlebarLayer window="main">
+              <TitlebarLayer>
                 <IndexPage />
               </TitlebarLayer>
             </BackgroundLayer>

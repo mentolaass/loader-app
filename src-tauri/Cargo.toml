@@ -17,7 +17,7 @@ tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-winreg = "0.53.0"
+winreg = "0.55.0"
 sha2 = "0.10.8"
 hex = "0.4"
 tauri-plugin-http = "2.0.0"
@@ -31,7 +31,7 @@ tasklist = "0.2.15"
 vmprotect = { path = "../src-tauri/vmprotect", version = "0.2.0" }
 vmprotect-sys = { path = "../src-tauri/vmprotect-sys", version = "0.1.1" }
 vmprotect-macros = { path = "../src-tauri/vmprotect-macros", version = "0.1.0" }
-tauri-plugin-clipboard = "2.1.11"
+tauri-plugin-clipboard-manager = "2.2.0"
 
 [workspace]
 members = ["vmprotect", "vmprotect-sys", "vmprotect-macros"]

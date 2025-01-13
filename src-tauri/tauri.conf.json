@@ -30,7 +30,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "capabilities": ["debug", "main"]
     }
   },
   "bundle": {

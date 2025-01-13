@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button.tsx"
 import { Minus, X } from "lucide-react";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { getCurrentWebviewWindow, WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useEffect, useState } from "react";
 
-function TitlebarLayer({ children, window }: { children: JSX.Element, window: string, title?: string }) {
+function TitlebarLayer({ children }: { children: JSX.Element, title?: string }) {
     const [twindow, setTWindow] = useState<WebviewWindow>();
 
     async function load() {
-        const w = await WebviewWindow.getByLabel(window);
+        const w = await getCurrentWebviewWindow();
         setTWindow(w!);
     }
 

@@ -1,9 +1,9 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
-  "identifier": "default",
+  "identifier": "main",
   "description": "Capability for the main window",
   "windows": [
-    "main", "debug"
+    "main"
   ],
   "permissions": [
     {
@@ -21,7 +21,6 @@
     "core:window:allow-close",
     "core:window:allow-minimize",
     "dialog:default",
-    "upload:default",
-    "clipboard:allow-write-text"
+    "upload:default"
   ]
 }

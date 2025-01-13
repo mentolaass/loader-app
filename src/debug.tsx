@@ -34,7 +34,7 @@ disableMenuAndRefresh();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <TitlebarLayer title="debugging" window="debug">
+        <TitlebarLayer title="debugging">
             <DebugPage />
         </TitlebarLayer>
     </React.StrictMode>,

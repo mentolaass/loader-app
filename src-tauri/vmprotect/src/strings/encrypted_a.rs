@@ -10,9 +10,9 @@ impl EncryptedStringA<'_> {
     /// Do not call this method directly, use macro
     ///
     /// # Safety
-    /// 
+    ///
     /// str should be correct c string literal
-    /// 
+    ///
     /// len should be length of passed str (in bytes) excluding \0
     #[inline(always)]
     #[doc(hidden)]

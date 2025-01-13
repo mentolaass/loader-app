@@ -32,7 +32,7 @@ pub async fn run_client(
 
         let window = tauri::WebviewWindowBuilder::new(
             &app_handle,
-            "debug",
+            format!("debug_{}", id),
             tauri::WebviewUrl::App("debug.html".into()),
         )
         .inner_size(800.0, 600.0)
@@ -40,6 +40,8 @@ pub async fn run_client(
         .title("Debug Window")
         .resizable(true)
         .fullscreen(false)
+        .closable(true)
+        .minimizable(true)
         .transparent(true)
         .decorations(false)
         .shadow(false)

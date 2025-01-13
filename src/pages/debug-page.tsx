@@ -10,13 +10,18 @@ import { listen } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { Copy, MemoryStick, Timer } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import clipboard from "tauri-plugin-clipboard-api";
+import { writeText } from '@tauri-apps/plugin-clipboard-manager';
 
 export type Log = {
     id: number;
     source: string;
     timestamp: number;
     error: boolean;
+}
+
+function cleanLog(log: string): string {
+    const timestampRegex = /\[\d{2}:\d{2}:\d{2}\] /g;
+    return log.replace(timestampRegex, '');
 }
 
 function DebugPage() {
@@ -39,15 +44,15 @@ function DebugPage() {
                     const error = content.includes("%is_error%");
                     const newLog = {
                         id: randomNumber(0, timestamp),
-                        source: content.replace("%is_error%", ""),
+                        source: cleanLog(content.replace("%is_error%", "")),
                         timestamp: timestamp,
                         error: error,
                     };
-                    
+
                     setLogs((prevLogs) => [...prevLogs, newLog]);
                     setLogsBuffer((prevLogs) => [...prevLogs, `${event.payload}`]);
                 });
-    
+
                 unlisten_cd = await listen("client_data", (event) => {
                     const content = `${event.payload}`;
                     if (content.includes("%is_data%")) {
@@ -82,21 +87,23 @@ function DebugPage() {
     return (
         <TooltipProvider>
             <div className="w-screen h-screen">
-                <div className="bg-slate-950 w-full h-full p-5 gap-5 flex-row flex">
+                <div className="bg-slate-950 w-full h-full backdrop-blur-3xl p-5 gap-5 flex-row flex">
                     <div className="w-full h-full">
                         <ScrollArea ref={scrollRef} className="w-full h-[calc(100%-30px)]">
-                            <div className="pr-5 w-full h-full flex flex-col gap-5">
-                                {
-                                    logs.map((log) => (
-                                        <div key={log.id.toString()} className="select-none flex flex-col w-full justify-start rounded-3xl min-h-[30px] p-5 bg-slate-900">
-                                            {
-                                                log.error ? <h3 className="text-[16px] text-red-500">{getString("debug_client_error")}</h3> : <></>
-                                            }
-                                            <h3 className="break-all text-[14px]">{log.source}</h3>
-                                            <h3 className="break-all text-[14px] text-gray-400">{rawDateFromMillis(log.timestamp)}</h3>
-                                        </div>
-                                    ))
-                                }
+                            <div className="pr-5 w-full h-full flex flex-col">
+                                <div className="bg-slate-900 rounded-3xl">
+                                    {
+                                        logs.map((log) => (
+                                            <div key={log.id.toString()} className="select-none flex flex-col w-full justify-start min-h-[30px] px-5 p-1">
+                                                {
+                                                    log.error ? <h3 className="text-[16px] text-red-500">{getString("debug_client_error")}</h3> : <></>
+                                                }
+                                                <h3 className="break-all text-[12px]">{log.source}</h3>
+                                                <h3 className="break-all text-[12px] text-gray-400">{rawDateFromMillis(log.timestamp)}</h3>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </ScrollArea>
                     </div>
@@ -110,7 +117,7 @@ function DebugPage() {
                         <h3 className="select-none text-nowrap">{getString("debug_manage_process")}</h3>
                         <div className="flex flex-row flex-wrap gap-3 w-full">
                             <Button onClick={async () => {
-                                await clipboard.writeText(logsBuffer.join("\n"));
+                                await writeText(logsBuffer.join("\n"));
                                 toast({
                                     title: getString("debug_process_copy_logs_success")
                                 });

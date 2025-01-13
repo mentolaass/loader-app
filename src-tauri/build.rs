@@ -1,4 +1,4 @@
-use std::{path::Path, env};
+use std::{env, path::Path};
 
 fn main() {
     let dir = env::var("CARGO_MANIFEST_DIR").unwrap();

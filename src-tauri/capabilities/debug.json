@@ -1,0 +1,16 @@
+{
+    "$schema": "../gen/schemas/desktop-schema.json",
+    "identifier": "debug",
+    "description": "Capability for the debug window",
+    "windows": [
+      "debug_*"
+    ],
+    "permissions": [
+      "core:default",
+      "core:window:default",
+      "core:window:allow-start-dragging",
+      "core:window:allow-close",
+      "core:window:allow-minimize",
+      "clipboard-manager:allow-write-text"
+    ]
+  }

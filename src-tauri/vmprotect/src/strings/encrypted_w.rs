@@ -9,7 +9,7 @@ impl EncryptedStringW<'_> {
     /// Do not call this method directly, use macro
     ///
     /// # Safety
-    /// 
+    ///
     /// str should be correct c string literal
     #[doc(hidden)]
     #[inline(always)]

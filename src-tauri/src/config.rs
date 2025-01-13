@@ -32,7 +32,6 @@ pub fn get_proxy_api() -> String {
     protected!(cstr "http://localhost:8080").to_string()
 }
 
-
 pub fn bootstrap(app: &App) {
     init_product_name(app);
 }

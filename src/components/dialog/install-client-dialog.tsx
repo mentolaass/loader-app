@@ -72,7 +72,6 @@ function InstallClientDialog({ isOpen, onOpenChange, client, session }: { isOpen
                 session, client.raw_id, normalizePath(installDir),
                 await invoke("get_ram"), Number(await invoke("get_total_ram")) / 1024 / 1024,
                 await invoke("get_ww"), await invoke("get_wh"), jdks, jres);
-            console.log(jdks);
             const debug: boolean = await invoke("get_debug");
             invoke("run_client", { id: client.raw_id, path: args.bootstrap, debug: debug, args: args.content });
             onOpenChange(false);

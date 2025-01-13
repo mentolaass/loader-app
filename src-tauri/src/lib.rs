@@ -34,7 +34,7 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_upload::init())
-        .plugin(tauri_plugin_clipboard::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_opener::init())
