@@ -24,24 +24,24 @@ import { Checkbox } from "@/components/ui/checkbox.tsx";
 import useTranslation from "@/hooks/use-translation.tsx";
 import UpdateDialog from "@/components/dialog/update-dialog.tsx";
 
-const formSchema = z.object({
-    login: z.string()
-        .min(4, { message: "Логин должен быть длинее 4 символов" })
-        .max(12, { message: "Логин должен быть короче 12 символов" }),
-
-    password: z.string()
-        .min(6, { message: "Пароль должен быть длинее 6 символов" })
-        .max(16, { message: "Пароль должен быть короче 16 символов" }),
-
-    keep: z.boolean()
-})
-
 function LoginPage() {
     const { getString } = useTranslation();
     const [isAuthorizing, setIsAuthorizing] =useState<boolean>(false);
     const [isRequesting, setIsRequesting] = useState<boolean>(false);
     const [checkUpdatesIsCompleted, setCheckUpdatesIsCompleted] = useState<boolean>(false);
     const navigate = useNavigate();
+
+    const formSchema = z.object({
+        login: z.string()
+            .min(4, { message: getString("login_min_require") })
+            .max(12, { message: getString("login_max_require") }),
+    
+        password: z.string()
+            .min(6, { message: getString("pass_min_require") })
+            .max(16, { message: getString("pass_max_require") }),
+    
+        keep: z.boolean()
+    })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -63,7 +63,7 @@ function LoginPage() {
                 session = await commitSession(session.token, hwid);
             }
             if (!session.commited)
-                throw Error("Идентификатор устройства не совпадает");
+                throw Error(getString("invalid_hwid"));
             if (data.keep)
                 await invoke("write_session", { "session": session.token });
             navigate("/loader", { state: { session: session.token } });
@@ -103,13 +103,13 @@ function LoginPage() {
         <>
             {
                 isAuthorizing ?
-                    <div className="dark bg-background text-foreground font-inter w-full h-screen flex items-center justify-center">
+                    <div className="select-none dark bg-background text-foreground font-inter w-full h-screen flex items-center justify-center">
                         <div className="w-full h-full flex items-center text-gray-400 gap-3 justify-center">
                             <Spinner />
                         </div>
                     </div>
                     :
-                    <div className="dark bg-background text-foreground font-inter w-full h-screen flex items-center justify-center">
+                    <div className="select-none dark bg-background text-foreground font-inter w-full h-screen flex items-center justify-center">
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)}>
                                 <Card className="mb-[30px] border-none rounded-3xl max-w-[400px] bg-slate-900">

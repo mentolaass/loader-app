@@ -1,5 +1,5 @@
 use bitflags::bitflags;
-use chrono::{offset::TimeZone, Date, Utc};
+use chrono::{offset::TimeZone, DateTime, Utc};
 use std::ffi::NulError;
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
@@ -133,11 +133,11 @@ impl SerialState {
     }
 }
 
-fn convert_date(date: &VMProtectDate) -> Option<Date<Utc>> {
+fn convert_date(date: &VMProtectDate) -> Option<DateTime<Utc>> {
     if date.w_year == 0 && date.b_month == 0 && date.b_day == 0 {
         return None;
     }
-    Some(Utc.ymd(date.w_year as i32, date.b_month as u32, date.b_day as u32))
+    Utc.with_ymd_and_hms(date.w_year as i32, date.b_month as u32, date.b_day as u32, 0, 0, 0).earliest()
 }
 
 impl From<VMProtectSerialNumberData> for SerialNumberData {
@@ -172,9 +172,9 @@ pub struct SerialNumberData {
     /// Email
     email: String,
     /// Date of serial number expiration
-    expire: Option<Date<Utc>>,
+    expire: Option<DateTime<Utc>>,
     /// Max date of build, that will accept this key
-    max_build: Option<Date<Utc>>,
+    max_build: Option<DateTime<Utc>>,
     running_time: Duration,
     user_data: Vec<u8>,
 }
@@ -192,11 +192,11 @@ impl SerialNumberData {
         &self.email
     }
     #[inline(always)]
-    pub fn expire(&self) -> Option<Date<Utc>> {
+    pub fn expire(&self) -> Option<DateTime<Utc>> {
         self.expire
     }
     #[inline(always)]
-    pub fn max_build(&self) -> Option<Date<Utc>> {
+    pub fn max_build(&self) -> Option<DateTime<Utc>> {
         self.max_build
     }
     #[inline(always)]

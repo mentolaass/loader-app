@@ -46,6 +46,13 @@ const Resource: Language[] = [
             "client-total-runs": "Всего запусков",
             "client-subscription": "Дата окончания подписки",
 
+            "login_min_require": "Логин должен быть длиннее 4 символов",
+            "login_max_require": "Логин должен быть короче 12 символов",
+            "pass_min_require": "Пароль должен быть длиннее 6 символов",
+            "pass_max_require": "Пароль должен быть короче 16 символов",
+
+            "invalid_hwid": "Идентификатор устройства не совпадает",
+
             "settings-title-game": "Настройка игры",
             "settings-title-account": "Ваш аккаунт",
             "settings-title-loader": "Настройка лоадера",
@@ -97,6 +104,13 @@ const Resource: Language[] = [
             "client-total-updates": "Total Updates",
             "client-total-runs": "Total Runs",
             "client-subscription": "Expires Subscription Date",
+
+            "login_min_require": "Login must be longer than 4 characters",
+            "login_max_require": "Login must be shorter than 12 characters",
+            "pass_min_require": "Password must be longer than 6 characters",
+            "pass_max_require": "Password must be shorter than 16 characters",
+
+            "invalid_hwid": "Invalid HWID",
 
             "settings-title-game": "Game Settings",
             "settings-title-account": "Your Account",

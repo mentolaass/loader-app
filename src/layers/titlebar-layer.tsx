@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button.tsx"
-import { Minus, X } from "lucide-react";
+import { Maximize2, Minus, X } from "lucide-react";
 import { getCurrentWebviewWindow, WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useEffect, useState } from "react";
 
@@ -29,7 +29,13 @@ function TitlebarLayer({ children }: { children: JSX.Element, title?: string }) 
                                         <Minus />
                                     </Button>
 
-                                    <Button onClick={() => twindow!.close()} className={"rounded-none h-[30px] w-[30px]"} variant={"ghost"} size={"icon"}>
+                                    <Button onClick={async () => {
+                                        await twindow!.isMaximized() ? twindow!.unmaximize() : twindow!.maximize();
+                                    }} className={"rounded-none h-[30px] w-[30px] [&_svg]:size-3.5"} variant={"ghost"} size={"icon"}>
+                                        <Maximize2 />
+                                    </Button>
+
+                                    <Button onClick={() => twindow!.close()} className={"rounded-none h-[30px] hover:bg-red-600 w-[30px]"} variant={"ghost"} size={"icon"}>
                                         <X />
                                     </Button>
                                 </div>
