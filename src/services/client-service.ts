@@ -11,6 +11,16 @@ export type ClientAssets = {
     data: ClientAsset[]
 }
 
+export type JDK = {
+    path: string;
+    ver: string;
+}
+
+export type JRE = {
+    path: string;
+    ver: string;
+}
+
 export type ClientArgs = {
     content: string[];
     bootstrap: string;
@@ -48,7 +58,15 @@ export async function fetchClientAssets(session: string, raw_id: string): Promis
     return response.json();
 }
 
-export async function buildClientArgs(session: string, raw_id: string, install_dir: string, ram: number, max_ram: number, window_w: number, window_h: number): Promise<ClientArgs> {
+export async function buildClientArgs(
+    session: string, 
+    raw_id: string, 
+    install_dir: string, 
+    ram: number, 
+    max_ram: number, 
+    window_w: number, 
+    window_h: number, 
+    jdks: JDK[], jres: JRE[]): Promise<ClientArgs> {
     let PROXY_API = await provideProxyAPI();
     const response = await fetch(`${PROXY_API}/api/v1/client/build/args`,
         {
@@ -56,7 +74,7 @@ export async function buildClientArgs(session: string, raw_id: string, install_d
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${session}`
             },
-            body: JSON.stringify({ raw_id: raw_id, install_dir: install_dir, ram: ram, max_ram: max_ram, window_h: window_h, window_w: window_w }),
+            body: JSON.stringify({ raw_id: raw_id, install_dir: install_dir, ram: ram, max_ram: max_ram, window_h: window_h, window_w: window_w, jdks: jdks, jres: jres }),
             method: "POST",
             connectTimeout: 20
         });

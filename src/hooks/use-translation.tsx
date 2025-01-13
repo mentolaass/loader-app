@@ -40,6 +40,7 @@ const Resource: Language[] = [
             "debug_manage_process": "Управление процессом",
             "debug_proccess_info": "Информация о процессе",
             "debug_process_copy_logs": "Скопировать логи",
+            "debug_process_copy_logs_success": "Успешно скопировано",
 
             "client-total-updates": "Всего обновлений",
             "client-total-runs": "Всего запусков",
@@ -91,6 +92,7 @@ const Resource: Language[] = [
             "debug_manage_process": "Manage Process",
             "debug_proccess_info": "Process Info",
             "debug_process_copy_logs": "Copy Logs",
+            "debug_process_copy_logs_success": "Success Copy",
 
             "client-total-updates": "Total Updates",
             "client-total-runs": "Total Runs",

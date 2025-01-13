@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { toast } from "@/hooks/use-toast";
 import useTranslation from "@/hooks/use-translation";
 import { parseUTCTimeToSeconds, randomNumber, rawDateFromMillis } from "@/utils/utils";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { Copy, MemoryStick, Timer } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import clipboard from "tauri-plugin-clipboard-api";
 
 export type Log = {
     id: number;
@@ -19,6 +21,7 @@ export type Log = {
 
 function DebugPage() {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const [logsBuffer, setLogsBuffer] = useState<string[]>([]);
     const [logs, setLogs] = useState<Log[]>([]);
     const [RAM, setRAM] = useState<string>("0");
     const [runtime, setRuntime] = useState<string>("0");
@@ -42,6 +45,7 @@ function DebugPage() {
                     };
                     
                     setLogs((prevLogs) => [...prevLogs, newLog]);
+                    setLogsBuffer((prevLogs) => [...prevLogs, `${event.payload}`]);
                 });
     
                 unlisten_cd = await listen("client_data", (event) => {
@@ -105,7 +109,12 @@ function DebugPage() {
                         </div>
                         <h3 className="select-none text-nowrap">{getString("debug_manage_process")}</h3>
                         <div className="flex flex-row flex-wrap gap-3 w-full">
-                            <Button variant="outline" className="border-none [&_svg]:size-5 rounded-3xl">
+                            <Button onClick={async () => {
+                                await clipboard.writeText(logsBuffer.join("\n"));
+                                toast({
+                                    title: getString("debug_process_copy_logs_success")
+                                });
+                            }} variant="outline" className="border-none [&_svg]:size-5 rounded-3xl">
                                 <Copy />
                                 {getString("debug_process_copy_logs")}
                             </Button>

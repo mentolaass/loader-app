@@ -31,6 +31,7 @@ tasklist = "0.2.15"
 vmprotect = { path = "../src-tauri/vmprotect", version = "0.2.0" }
 vmprotect-sys = { path = "../src-tauri/vmprotect-sys", version = "0.1.1" }
 vmprotect-macros = { path = "../src-tauri/vmprotect-macros", version = "0.1.0" }
+tauri-plugin-clipboard = "2.1.11"
 
 [workspace]
 members = ["vmprotect", "vmprotect-sys", "vmprotect-macros"]

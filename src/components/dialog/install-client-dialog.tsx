@@ -1,4 +1,4 @@
-import { buildClientArgs, ClientArgs, ClientAssets, ClientData, fetchClientAssets, fetchSubscriptionInfo, SubscriptionData } from "@/services/client-service";
+import { buildClientArgs, ClientArgs, ClientAssets, ClientData, fetchClientAssets, fetchSubscriptionInfo, JDK, JRE, SubscriptionData } from "@/services/client-service";
 import { Dialog, DialogHeader, DialogDescription, DialogContent, DialogTitle, DialogFooter } from "@/components/ui/dialog.tsx";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -66,12 +66,15 @@ function InstallClientDialog({ isOpen, onOpenChange, client, session }: { isOpen
                 }
             }
             setCurrentState(getString("client_running"));
+            const jdks: JDK[] = await invoke("get_installed_jdks");
+            const jres: JRE[] = await invoke("get_installed_jres");
             const args: ClientArgs = await buildClientArgs(
                 session, client.raw_id, normalizePath(installDir),
                 await invoke("get_ram"), Number(await invoke("get_total_ram")) / 1024 / 1024,
-                await invoke("get_ww"), await invoke("get_wh"));
+                await invoke("get_ww"), await invoke("get_wh"), jdks, jres);
+            console.log(jdks);
             const debug: boolean = await invoke("get_debug");
-            invoke("run_client", { id: client.raw_id, path: args.bootstrap, debug: debug, args: [...args.content, ...[`--${client.raw_id}`]] });
+            invoke("run_client", { id: client.raw_id, path: args.bootstrap, debug: debug, args: args.content });
             onOpenChange(false);
         } catch (e) {
             toast({

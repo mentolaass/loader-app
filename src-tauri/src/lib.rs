@@ -7,6 +7,7 @@ use bootstrap::{run_client, client_is_running};
 use config::{get_product_name, get_proxy_api, bootstrap};
 use hash::get_sha256;
 use hwid::get_hwid;
+use java::{get_installed_jdks, get_installed_jres};
 use registry::{
     get_debug, get_install_dir, get_language, get_ram, get_session, get_wh, get_ww, write_debug,
     write_install_dir, write_language, write_ram, write_session, write_wh, write_ww,
@@ -22,17 +23,19 @@ mod hash;
 mod hwid;
 mod registry;
 mod utils;
+mod java;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_upload::init())
-        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             bootstrap(app);
 
             Ok(())
         })
+        .plugin(tauri_plugin_upload::init())
+        .plugin(tauri_plugin_clipboard::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
@@ -61,7 +64,9 @@ pub fn run() {
             write_ww,
             client_is_running,
             run_client,
-            get_proxy_api
+            get_proxy_api,
+            get_installed_jdks,
+            get_installed_jres
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

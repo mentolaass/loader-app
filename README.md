@@ -100,7 +100,15 @@ pub fn get_proxy_api() -> String {
   "ram": "number", // объем выставленной ОЗУ для jvm
   "max_ram": "number", // объем максимальной ОЗУ для jvm
   "window_w": "number", // ширина для окна игры
-  "window_h": "number" // высота для окна игры
+  "window_h": "number", // высота для окна игры
+  "jdks": [ // установленные jdk у клиента
+    "path": "string", // путь до папки с jdk
+    "ver": "string", // версия jdk
+  ],
+  "jres": [ // установленные jre у клиента
+    "path": "string", // путь до папки с jre
+    "ver": "string", // версия jre
+  ]
 }
 ```
 - **Response:**
