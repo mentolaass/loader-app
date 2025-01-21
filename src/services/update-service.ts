@@ -1,5 +1,5 @@
-import { provideProxyAPI } from '@/utils/config';
-import { fetch } from '@tauri-apps/plugin-http'
+import { toast } from "@/hooks/use-toast";
+import { invoke } from "@tauri-apps/api/core";
 
 export type ExeData = {
     sha256: string;
@@ -7,15 +7,6 @@ export type ExeData = {
 }
 
 export async function fetchUpdates(): Promise<ExeData> {
-    let PROXY_API = await provideProxyAPI();
-    const response = await fetch(`${PROXY_API}/api/v1/loader/updates`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "GET",
-            connectTimeout: 20
-        });
-
-    return response.json();
+    return await invoke("fetch_updates")
+        .catch((error) => toast({title: error, variant: "destructive"})) as ExeData;
 }

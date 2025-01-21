@@ -1,5 +1,10 @@
 # Конфигурируемый лоадер Minecraft'a с кастомными клиентами.
-### Кастомный клиент означает полностью конфигурируемый, лоадер автоматизирует процесс поставки клиента на ПК пользователя и запускает его по конфигурации с сервера.
+### Зависимости/инструменты
+**perl** (для сборки openssl) [strawberry](https://strawberryperl.com/)
+
+**rust == 1.84.0**
+
+**node.js == 23.6.0**
 ### Скриншоты дизайна лоадера
 #### Обновление
 ![](https://i.imgur.com/lZbmr6s.png "")
@@ -15,7 +20,6 @@
 ![](https://i.imgur.com/nmd3Dvo.png "")
 
 # Конфигурация проекта
-Перед сборкой, протестируйте конфигурацию с сборкой: npm run tauri dev
 
 ### src-tauri/tauri.conf.json
 ```json
@@ -39,23 +43,11 @@
 }
 ```
 
-### src-tauri/capabilities/default.json
-```json
-{
-  "permissions": [
-    {
-      "identifier": "http:default",
-      "allow": [{ "url": "http://*:*" }] // измените http://*:* на ссылку вашего хоста, обязательно установите его с SSL сертификатом для доп безопасности.
-    }
-  ]
-}
-```
-
 ### src-tauri/src/config.rs
 ```rust
 #[tauri::command]
 pub fn get_proxy_api() -> String {
-    protected!(cstr "http://localhost:8080").to_string() // измените на хост
+    protected!(cstr "http://localhost:8080").to_string() // измените на свой хост, если имеется ssl используйте его
 }
 ```
 
@@ -171,7 +163,7 @@ pub fn get_proxy_api() -> String {
 ```json
 {
     "login": "string", // логин
-    "hash": "string" // хэш пароля (sha256)
+    "password": "string" // пароль
 }
 ```
 - **Response:**
@@ -227,16 +219,26 @@ pub fn get_proxy_api() -> String {
   "download_url": "string" // ссылка на скачивание лоадера, может быть потоком или прямой ссылкой на файл
 }
 ```
-
-# Сборка проекта
-Перед сборкой убедитесь, что у вас установлен node.js==23.4.0 и npm.
-Для сборки проекта необходим rust==1.84.0.
-
-```cmd
-cd ./loader-app
-npm i
-npm run tauri build
+# Проверка SSL сертификатов перед запросами (только при https)
+### src-tauri/src/config.rs
+```rust
+pub fn get_cert() -> String {
+  protected!(cstr "undefined").to_string() // измените undefined на сертификат хоста формата PEM.
+}
 ```
 
+# Тестирование
+```cmd
+cd ./loader-app
+npm i (если не установлены пакеты)
+npm run tauri dev
+```
+
+# Сборка проекта
+```cmd
+cd ./loader-app
+npm i (если не установлены пакеты)
+npm run tauri build
+```
 Исполняемый файл будет доступен по пути .\loader-app\src-tauri\target\release.
-Чтобы избавиться от .dll файлов, защитите приложение с помощью VMProtect, импортируйте скрипт для работы: src-tauri/vmprotect/script.lua
+Чтобы избавиться от .dll файлов, защитите приложение с помощью VMProtect с импортом скрипта для работы: src-tauri/vmprotect/script.lua

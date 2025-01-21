@@ -4,22 +4,22 @@ use winreg::{
 };
 
 #[derive(serde::Serialize)]
-pub struct JAVA {
+pub struct Java {
     path: String,
     ver: String,
 }
 
 #[tauri::command]
-pub fn get_installed_jres() -> Vec<JAVA> {
+pub fn get_installed_jres() -> Vec<Java> {
     find_by(String::from("Java Runtime Environment"))
 }
 
 #[tauri::command]
-pub fn get_installed_jdks() -> Vec<JAVA> {
+pub fn get_installed_jdks() -> Vec<Java> {
     find_by(String::from("JDK"))
 }
 
-fn find_by(key: String) -> Vec<JAVA> {
+fn find_by(key: String) -> Vec<Java> {
     let reg_key = RegKey::predef(HKEY_LOCAL_MACHINE)
         .open_subkey_with_flags(format!("SOFTWARE\\JavaSoft\\{}", key), KEY_READ);
     let mut vec = Vec::new();
@@ -32,7 +32,7 @@ fn find_by(key: String) -> Vec<JAVA> {
 
                 match opened_subkey {
                     Ok(os) => {
-                        vec.push(JAVA {
+                        vec.push(Java {
                             ver: subkey,
                             path: os.get_value("JavaHome").unwrap(),
                         });

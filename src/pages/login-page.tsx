@@ -56,14 +56,12 @@ function LoginPage() {
         setIsRequesting(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
         try {
-            let hash: string = await invoke("get_sha256", { "data": data.password })
-            let session = await fetchSession(data.login, hash);
+            let session = await fetchSession(data.login, data.password);
             if (!session.commited) {
-                let hwid: string = await invoke("get_hwid");
-                session = await commitSession(session.token, hwid);
+                session = await commitSession(session.token);
+                if (!session.commited)
+                    throw Error("fail commit");
             }
-            if (!session.commited)
-                throw Error(getString("invalid_hwid"));
             if (data.keep)
                 await invoke("write_session", { "session": session.token });
             navigate("/loader", { state: { session: session.token } });
@@ -87,8 +85,7 @@ function LoginPage() {
                 setIsAuthorizing(false);
                 return;
             }
-            const hwid: string = await invoke("get_hwid");
-            const session = await commitSession(sessionToken, hwid);
+            const session = await commitSession(sessionToken);
             if (session.commited) navigate("/loader", { state: { session: session.token } })
         } catch { }
         setIsAuthorizing(false);

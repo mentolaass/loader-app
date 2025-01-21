@@ -1,5 +1,5 @@
-import { provideProxyAPI } from "@/utils/config";
-import { fetch } from '@tauri-apps/plugin-http'
+import { toast } from "@/hooks/use-toast";
+import { invoke } from "@tauri-apps/api/core";
 
 export type ClientAsset = {
     path: string;
@@ -43,19 +43,8 @@ export type SubscriptionData = {
 }
 
 export async function fetchClientAssets(session: string, raw_id: string): Promise<ClientAssets> {
-    let PROXY_API = await provideProxyAPI();
-    const response = await fetch(`${PROXY_API}/api/v1/client/assets`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${session}`
-            },
-            body: JSON.stringify({ raw_id: raw_id }),
-            method: "POST",
-            connectTimeout: 20
-        });
-
-    return response.json();
+    return await invoke("fetch_client_assets", { session: session, raw_id: raw_id })
+        .catch((error) => toast({title: error, variant: "destructive"})) as ClientAssets;
 }
 
 export async function buildClientArgs(
@@ -67,48 +56,16 @@ export async function buildClientArgs(
     window_w: number, 
     window_h: number, 
     jdks: JDK[], jres: JRE[]): Promise<ClientArgs> {
-    let PROXY_API = await provideProxyAPI();
-    const response = await fetch(`${PROXY_API}/api/v1/client/build/args`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${session}`
-            },
-            body: JSON.stringify({ raw_id: raw_id, install_dir: install_dir, ram: ram, max_ram: max_ram, window_h: window_h, window_w: window_w, jdks: jdks, jres: jres }),
-            method: "POST",
-            connectTimeout: 20
-        });
-
-    return response.json();
+        return await invoke("build_client_args", { session: session, raw_id: raw_id, install_dir: install_dir, ram: ram, max_ram: max_ram, window_h: window_h, window_w: window_w, jdks: jdks, jres: jres })
+            .catch((error) => toast({title: error, variant: "destructive"})) as ClientArgs;
 }
 
 export async function fetchClientInfos(session: string): Promise<ClientData[]> {
-    let PROXY_API = await provideProxyAPI();
-    const response = await fetch(`${PROXY_API}/api/v1/client/all`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${session}`
-            },
-            method: "POST",
-            connectTimeout: 20
-        });
-
-    return response.json();
+    return await invoke("fetch_client_infos", { session: session })
+        .catch((error) => toast({title: error, variant: "destructive"})) as ClientData[];
 }
 
 export async function fetchSubscriptionInfo(session: string, raw_id: string): Promise<SubscriptionData> {
-    let PROXY_API = await provideProxyAPI();
-    const response = await fetch(`${PROXY_API}/api/v1/subscription`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${session}`
-            },
-            body: JSON.stringify({ raw_id: raw_id }),
-            method: "POST",
-            connectTimeout: 20
-        });
-
-    return response.json();
+    return await invoke("fetch_subscription_info", { session: session, raw_id: raw_id })
+        .catch((error) => toast({title: error, variant: "destructive"})) as SubscriptionData;
 }

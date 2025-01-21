@@ -1,6 +1,6 @@
 [package]
 name = "loader-app"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Tauri App"
 authors = ["mentola"]
 edition = "2021"
@@ -10,20 +10,18 @@ name = "loader_app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2", features = [] }
+tauri-build = { version = "2.0.5", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [] }
-tauri-plugin-opener = "2"
+tauri = { version = "2.2.2", features = [] }
+tauri-plugin-opener = "2.2.4"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 winreg = "0.55.0"
 sha2 = "0.10.8"
 hex = "0.4"
-tauri-plugin-http = "2.0.0"
 sysinfo = "0.33.1"
-windows = { version = "0.59.0", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_Storage_FileSystem", "Win32_Security", "Win32_Graphics_Gdi"] }
-raw-cpuid = "11.2.0"
+windows = { version = "0.59.0", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_Storage_FileSystem", "Win32_Security", "Win32_Graphics_Gdi", "Win32_System_Ioctl", "Win32_System_IO"] }
 tauri-plugin-dialog = "2"
 tauri-plugin-upload = "2"
 tokio = { version = "1.43.0", features = ["full"] }
@@ -32,6 +30,9 @@ vmprotect = { path = "../src-tauri/vmprotect", version = "0.2.0" }
 vmprotect-sys = { path = "../src-tauri/vmprotect-sys", version = "0.1.1" }
 vmprotect-macros = { path = "../src-tauri/vmprotect-macros", version = "0.1.0" }
 tauri-plugin-clipboard-manager = "2.2.0"
+openssl-sys = "0.9"
+openssl = { version = "0.10", features = ["vendored"] }
+reqwest = "0.12.12"
 
 [workspace]
 members = ["vmprotect", "vmprotect-sys", "vmprotect-macros"]

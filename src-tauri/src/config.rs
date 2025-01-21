@@ -27,6 +27,10 @@ pub fn get_product_name() -> String {
         .unwrap_or(String::from("MLoader"))
 }
 
+pub fn get_cert() -> String {
+    protected!(cstr "undefined").to_string()
+}
+
 #[tauri::command]
 pub fn get_proxy_api() -> String {
     protected!(cstr "http://localhost:8080").to_string()
